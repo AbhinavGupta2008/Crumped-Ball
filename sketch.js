@@ -1,81 +1,70 @@
+
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
-
-var ball,groundObj,leftSide,rightSide;
+const Render = Matter.Render;
+var dustbinObj, paperObject,groundObject	
 var world;
-var radius = 70;
-
-function preload(){
-
-	dustbinImg = loadImage("dustbin.png");
-	paperImg = loadImage("paper.png");
-}
-
 
 
 function setup() {
 	createCanvas(1600, 700);
 	rectMode(CENTER);
 
+
 	engine = Engine.create();
 	world = engine.world;
+	
+	paperObject=new paper(200,450,70);
+	groundObject=new ground(width/2,670,width,20);
+	dustbinObj=new dustbin(1200,650);
+	//Create a Ground
+	
 
-	var ball_options={
-		isStatic:false,
-		restitution:0.3,
-		density:0.4
-	}
-
-	ball = Bodies.circle(260,100,radius/2.6,ball_options);
-	World.add(world,ball);
-
-	ground=new Ground(width/2,670,width,20);
-	leftSide = new Ground(1100,600,10,120);
-	rightSide = new Ground(1270,600,10,120);
-	bottomSide = new Ground(1185,650,150,20);
+	var render = Render.create({
+	  element: document.body,
+	  engine: engine,
+	  options: {
+	    width: 1600,
+	    height: 700,
+	    wireframes: false
+	  }
+	});
 
 	Engine.run(engine);
+	Render.run(render);
   
 }
 
 
 function draw() {
-	background(200);
-	rectMode(CENTER);
+  rectMode(CENTER);
+  background(230);
+ 
+  
+  paperObject.display();
+  groundObject.display();
+  dustbinObj.display();
 
-
-	ground.display();
-	leftSide.display();  
-	rightSide.display();
-	bottomSide.display();
-
-	
-	imageMode(CENTER);
-
-	image(paperImg,ball.position.x,ball.position.y,radius,radius);
-
-	if(keyCode === UP_ARROW){
-		keyPressed() ;
-	}
-	
-	image(dustbinImg, 1185, 570, 200,200);
-console.log(ball.velocityY)
-if(ball.y<0 ){
-	ball.velocityY=ball.velocityY * (-1)
-
-}
-if(ball.x>width || ball.x<0 ){
-	ball.velocityX=ball.velocityX * (-1)
-}
-
+  
+  
+ 
+  
+  
+ 
 }
 
 function keyPressed() {
   	if (keyCode === UP_ARROW) {
 
-		Matter.Body.applyForce(ball,ball.position,{x:45,y:-45});
+    	Matter.Body.applyForce(paperObject.body,paperObject.body.position,{x:130,y:-145});
+
     
   	}
 }
+
+
+
+
+
